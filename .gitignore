@@ -1,0 +1,3 @@
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
+data/cleaned_sn45.csv
