@@ -1,4 +1,5 @@
-# data-analysis
+# Data Analysis
+This repository contains data and code associated with analysis of data gathered from the network of sensor boxes in East Boston.
 
 ## Opening the Jupyter Notebook (.ipynb)
 You need to install several Python packages to use the jupyter notebook.
