@@ -1,6 +1,9 @@
 # Data Analysis
 This repository contains data and code associated with analysis of data gathered from the network of sensor boxes in East Boston.
 
+## Contents
+Current contents of this repository include two notebooks associated with some exploration over Spring 2020 ([looking at the raw data](https://github.com/airpartners/data-analysis/blob/master/SP19-raw-data-analysis-test.ipynb) and [doing some pandas processing](https://github.com/airpartners/data-analysis/blob/master/SP19-data-analysis-test.ipynb) and some [preliminary computations and analysis associated with an AQI assumpion test](https://github.com/airpartners/data-analysis/blob/master/aqi-analysis.ipynb) conducted in fall 2020.
+
 ## Opening the Jupyter Notebook (.ipynb)
 You need to install several Python packages to use the jupyter notebook.
 ```
