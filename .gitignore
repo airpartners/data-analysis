@@ -4,3 +4,6 @@ data/cleaned_sn45.csv
 **/.env
 token.txt
 **.DS_Store
+**/__pycache__/**
+**/img/**
+**/qaq_cleaned_data/**
