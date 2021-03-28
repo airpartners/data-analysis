@@ -306,11 +306,11 @@ class ModPMHandler(DataHandler):
         :open_existing: (bool) True if the file has been pulled and cleaned already.
         :returns: cleaned pandas dataframe
         """
-        save_path = f"qaq_cleaned_data/{file_prefix}_mod.pckl"
+        save_path = f"qaq_cleaned_data/{file_prefix}_mod.pckl"  #TODO make reliant on start and end date
         if open_existing:
             return self.load_df(save_path)
 
-        client = QuantAQHandler(TOKEN_PATH) #TODO not token_path
+        client = QuantAQHandler(TOKEN_PATH) #TODO make this not rely on a global variable token_path?
         df = client.request_data(self.sensor, raw=True)
 
         # flatten and clean the dataframe
@@ -344,12 +344,12 @@ if __name__ == "__main__":
     sn_df = sn_handler.main(start_time, end_time, save_name, open_existing=True)
     plt = OpenAirPlots()
     prefix = f"{save_name}_sn"
-    plt.time_variation(sn_df, save_name, sn_handler.data_cols)
-    plt.polar_plot(sn_df, save_name, sn_handler.data_cols)
+    plt.time_variation(sn_df, prefix, sn_handler.data_cols)
+    plt.polar_plot(sn_df, prefix, sn_handler.data_cols)
 
     print("pulling MOD-PM data: ")
     mod_df = mod_handler.main(start_time, end_time, save_name)
     plt = OpenAirPlots()
     prefix = f"{save_name}_mod"
-    plt.time_variation(mod_df, save_name, mod_handler.data_cols)
-    plt.polar_plot(mod_df, save_name, mod_handler.data_cols)
+    plt.time_variation(mod_df, prefix, mod_handler.data_cols)
+    plt.polar_plot(mod_df, prefix, mod_handler.data_cols)

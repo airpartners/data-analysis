@@ -1,14 +1,60 @@
 # Data Analysis
-This repository contains data and code associated with analysis of data gathered from the network of sensor boxes in East Boston.
+Various tools for QuantAQ sensor data analysis. See `notebooks/` for the older version of this repo which contains jupyter notebooks for visual data analysis.
 
-## Contents
-Current contents of this repository include two notebooks associated with some exploration over Spring 2020 ([looking at the raw data](https://github.com/airpartners/data-analysis/blob/master/SP19-raw-data-analysis-test.ipynb) and [doing some pandas processing](https://github.com/airpartners/data-analysis/blob/master/SP19-data-analysis-test.ipynb)) and some [preliminary AQI computations and analysis](https://github.com/airpartners/data-analysis/blob/master/aqi-analysis.ipynb) [associated with an assumpion test](https://docs.google.com/document/d/1EtGzySFGZ5PVPhCsywW77AdkwYG_axO-Zp_cfnLsTVg/edit?usp=sharing) conducted in Fall 2020.
+## Pipeline
+This pipeline automates the data pulling and cleaning process for grabbing data from the QuantAQ network of sensors.
+### Prerequisites
+1. These instructions assume you are running at least Python 3.8
+2. Run `pip install -r requirements.txt` to install the Python dependencies.
+3. Get an API key for QuantAQ. You can ask Scott Hersey for an API key. Copy the key into a file called `token.txt` in the root of this repository.
+4. If you want to visualize things with the R package, OpenAir, you will need to install the necessary R dependencies. This involves installing R, installing OpenAir (and its dependencies).
+    * R installation: [link](https://cran.r-project.org/doc/manuals/r-release/R-admin.html)
+    * OpenAir installation: Open the R application. In the taskbar, select `Packages & Data` dropdown menu, and click on  `Package Installer`. This should open up a window. From there, make sure that `CRAN binaries` is selected from the first dropdown menu. Type "openair" into the search bar. It might prompt you to select a region. I picked `US [IW]`, then pressed `Get List`. I selected the first result. At the bottom, make sure that `Install Dependencies` is checked, then click `Install Selected`. **NOTE: I did this in a much more jank way, so I'd be happy to know if someone has success replicating this process.**
 
-## Opening the Jupyter Notebook (.ipynb)
-You need to install several Python packages to use the jupyter notebook.
+### Usage
+#### Fetching Data
+By default, cleaned data results are returned as a pandas `DataFrame` and also stored as a `pickle` file. As of March 28th, 2021, you might have to create a data-specific folder to store your results.
+
+First, the imports:
+```[python]
+from datetime import datetime
+from quantaq_pipeline import SNHandler, ModPMHandler
 ```
-pip3 install --upgrade pip
-pip3 install --upgrade ipython jupyter pandas numpy matplotlib
+* If you are using a gas phase sensor (i.e. its serial ID starts with `SN`):
+```[python]
+#initalize handler that will pull data from the "your-sn-sensor-id" sensor
+handler = SNHandler(sensor_id="your-sn-sensor-id")
+
+#define start and end date for sensor collection from Mar 5th-9th, 2021
+start_date, end_date = datetime(2021, 3, 5), datetime(2021, 3, 9)
+
+#define a recognizable prefix to find the stored results
+save_name = "my-sn-sensor-file"
+
+#run the pipeline, gives you a pandas dataframe to play with!
+df = handler.main(start_date, end_date, save_name)
+```
+* If you are using a modular PM sensor (i.e. its serial ID starts with `MOD-PM`) everything is the same as the SN sensor except you intiailize a different class:
+```[python]
+handler = ModPMHandler(sensor_id="your-mod-pm-sensor-id")
+#... initialize a start/end date and a save_name
+df = handler.main(start_date, end_date, save_name)
 ```
 
-After those commands complete, `cd` into the data-analysis repo and type `jupyter notebook`. The directory should open in your browser and then you can open the notebook by simply clicking on the file name.
+#### Visualization with Openair
+Once you have your data in a pandas `DataFrame`, you can call some visualization functions on it. This is a basic example, refer to the docstrings in the `dataviz.py` file for more detailed information.
+```[python]
+from dataviz import OpenAirPlots
+
+#grab data from an SN sensor like we did above...
+handler = SNHandler(sensor_id="your-sn-sensor-id")
+df = handler.main(start_date, end_date, save_name)
+
+#intialize openair plotting class
+plt = OpenAirPlots()
+
+#create time variation plots
+plt.time_variation(df, save_name, handler.data_cols)
+#create polar plots
+plt.polar_plot(df, save_name, handler.data_cols)
+```
