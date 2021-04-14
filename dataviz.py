@@ -18,7 +18,7 @@ class OpenAirPlots:
     def convert_df(self, df):
         pandas2ri.activate()
         #for openair we need to have a few specific column names
-        df = df.rename(columns={"timestamp": "date", "wind_speed": "ws", "wind_dir": "wd"})
+        df = df.rename(columns={"timestamp_local": "date", "wind_speed": "ws", "wind_dir": "wd"})
         # To R DataFrame
         r_df = ro.conversion.py2rpy(df)
         return r_df
@@ -34,11 +34,11 @@ class OpenAirPlots:
         pols = f"c({pols})"
         print(pols)
 
-        self.grdevices.png(f"img/{file_prefix}_diurnal.png", width=1200, height=700)
+        self.grdevices.png(f"{file_prefix}_diurnal.png", width=1200, height=700)
         ro.r.timeVariation(r_df, pollutant = ro.r(pols), normalise = True, main = "Normalized Group of Pollutants Diurnal Profile")
     
     def polar_plot(self, df, file_prefix, pollutants):
         r_df = self.convert_df(df)
         for p in pollutants:
-            self.grdevices.png(f"img/{file_prefix}_polar_{p}.png", width=700, height=700)
+            self.grdevices.png(f"{file_prefix}_polar_{p}.png", width=700, height=700)
             ro.r.polarPlot(r_df, pollutant = p, main = f"{p.upper()} Polar Plot")
