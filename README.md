@@ -42,6 +42,20 @@ handler = ModPMHandler(sensor_id="your-mod-pm-sensor-id")
 df = handler.main(start_date, end_date, save_name)
 ```
 
+### File Names for Saved Dataframes
+Whenever you run the pipeline (either calling `from_csv()` or `from_api()` methods), the cleaned dataframe is returned by the method, and it is also saved locally as a `pickle` file. The naming scheme for these `pickle` files is as follows:
+```
+#for dataframes that were not smoothed.
+qaq_cleaned_data/<sensor_id>/<start_year>_<start_month>_<start_day>_<end_year>_<end_month>_<end_day>.pckl
+
+#for dataframes that were smoothed (unrealistically high sensor readings have been removed from the dataframe)
+qaq_cleaned_data/<sensor_id>/<start_year>_<start_month>_<start_day>_<end_year>_<end_month>_<end_day>_smoothed.pckl
+```
+If saving a dataframe from the `from_api()` call, the start and end `Y_M_D` dates are determined by the `datetime` objects that were passed to the QuantAQ API call. A dataframe saved during the `from_csv()` method will have dates determined by the first and last timestamps that appear in the dataframe. Therefore, a smoothed dataframe with min/max timestamps of `March 1st, 2021` to `March 10th, 2021`, originating from the sensor `SN000-046` would have the filepath: 
+```
+qaq_cleaned_data/SN000-046/2021_3_1_2021_3_10_smoothed.pckl
+```
+
 # Visualizing Plots with OpenAir and `rpy2`
 ## Prerequisites - R, OpenAir, `rpy2` Installations
 If you want to visualize dataframe results with the R package, OpenAir, you will need to install the necessary R dependencies. To be specific, any methods found in the `dataviz.py` file require R. This involves installing R, installing OpenAir (and its dependencies).
