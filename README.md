@@ -11,36 +11,9 @@ This pipeline automates the data pulling and cleaning process for grabbing data 
 ## Usage
 Check out the `demo.py` script for example usage!
 
-By default, cleaned data results are returned as a pandas `DataFrame` and also stored as a `pickle` file.
-
-### Pulling from QuantAQ via Rest API
 **Note that requesting data from QuantAQ is slow! It takes on the order of 2-3 minutes per sensor, per day**
 
-First, the imports:
-```[python]
-from datetime import datetime
-from quantaq_pipeline import SNHandler, ModPMHandler
-```
-* If you are using a gas phase sensor (i.e. its serial ID starts with `SN`):
-```[python]
-#initalize handler that will pull data from the "your-sn-sensor-id" sensor
-handler = SNHandler(sensor_id="your-sn-sensor-id")
-
-#define start and end date for sensor collection from Mar 5th-9th, 2021
-start_date, end_date = datetime(2021, 3, 5), datetime(2021, 3, 9)
-
-#define a recognizable prefix to find the stored results
-save_name = "my-sn-sensor-file"
-
-#run the pipeline, gives you a pandas dataframe to play with!
-df = handler.main(start_date, end_date, save_name)
-```
-* If you are using a modular PM sensor (i.e. its serial ID starts with `MOD-PM`) everything is the same as the SN sensor except you intiailize a different class:
-```[python]
-handler = ModPMHandler(sensor_id="your-mod-pm-sensor-id")
-#... initialize a start/end date and a save_name
-df = handler.main(start_date, end_date, save_name)
-```
+By default, cleaned data results are returned as a pandas `DataFrame` and also stored as a `pickle` file.
 
 ### File Names for Saved Dataframes
 Whenever you run the pipeline (either calling `from_csv()` or `from_api()` methods), the cleaned dataframe is returned by the method, and it is also saved locally as a `pickle` file. The naming scheme for these `pickle` files is as follows:
@@ -95,21 +68,4 @@ sudo apt -y install r-base gdebi-core
 6. Run `pip install rpy2` to install the `rpy2` package
 
 ## Usage
-Refer to the `demo_viz.py` script for example usage!
-
-Once you have your data in a pandas `DataFrame`, you can call some visualization functions on it. This is a basic example, refer to the docstrings in the `dataviz.py` file for more detailed information.
-```[python]
-from dataviz import OpenAirPlots
-
-#grab data from an SN sensor like we did above...
-handler = SNHandler(sensor_id="your-sn-sensor-id")
-df = handler.main(start_date, end_date, save_name)
-
-#intialize openair plotting class
-plt = OpenAirPlots()
-
-#create time variation plots
-plt.time_variation(df, save_name, handler.data_cols)
-#create polar plots
-plt.polar_plot(df, save_name, handler.data_cols)
-```
+Refer to the `demo_main.py` script for example usage!
