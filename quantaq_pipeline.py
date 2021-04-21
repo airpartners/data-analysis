@@ -533,37 +533,3 @@ class ModPMHandler(DataHandler):
 
         #find the start/end time of the file
         return df
-
-if __name__ == "__main__":
-    start_date = datetime(2021, 3, 1)
-    end_date = datetime(2021, 3, 10)
-
-    sn_handler = SNHandler(sensor_id="SN000-111", start_date=start_date, end_date=end_date)
-    mod_handler = ModPMHandler(sensor_id="MOD-PM-00049", start_date=start_date, end_date=end_date)
-
-    print("pulling SN data: ")
-    smooth = True
-    final, raw = "raw_data/SN111_final_new.csv", "raw_data/SN111_raw_new.csv"
-    # # sn_df = sn_handler.from_api(open_existing=True)
-    sn_df = sn_handler.from_csv(final, raw)
-    sn_handler.plot(sn_df)
-
-    smooth = False
-    sn_df = sn_handler.from_csv(final, raw, smoothed=smooth)
-    sn_handler.plot(sn_df, smoothed=smooth)
-
-    # print("pulling MOD-PM data: ")
-    # smooth = True
-    # final, raw = "raw_data/MOD49_final.csv", "raw_data/MOD49_raw.csv"
-    # mod_df = mod_handler.from_csv(final, raw, smoothed=smooth)
-    # # mod_df = mod_handler.from_api()
-    # mod_handler.plot(mod_df, smoothed=smooth, cols=["pm1", "pm25", "pm10", "bin0", "opcn3_pm1", "opcn3_pm25", "opcn3_pm10", "neph_bin0", "pm1_env","pm25_env","pm10_env"])
-
-    # smooth = False
-    # mod_df = mod_handler.from_csv(final, raw, smoothed=smooth)
-    # # mod_df = mod_handler.from_api()
-    # mod_handler.plot(mod_df, smoothed=smooth, cols=["pm1", "pm25", "pm10", "bin0", "opcn3_pm1", "opcn3_pm25", "opcn3_pm10", "neph_bin0", "pm1_env","pm25_env","pm10_env"])
-
-    # do sensors in revere provide actionable data. is it valuable in interpreting the primary sources of pollutants in revere?
-    #     documenting process -> link to Github -> can reference the at-a-glance page -> can you get the dataframe from R to make an at-a-glance page
-    #TODO incorporate smoothing into main functions?

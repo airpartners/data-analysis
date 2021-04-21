@@ -13,7 +13,7 @@ from rpy2.robjects.packages import importr
 from rpy2.robjects import pandas2ri
 import rpy2.robjects as ro
 
-def plot(df, handler, smoothed=True, cols=None):
+def plot(df, handler, sensor_id, save_prefix=None, smoothed=True, cols=None):
     """
     Create diurnal and polar plots for relevant columns in dataframe.
 
@@ -23,10 +23,11 @@ def plot(df, handler, smoothed=True, cols=None):
     :param cols: (optional list) if defined, determines the columns of df to include in the plots
     :returns: null but saves OpenAir figures as .pngs locally.
     """
-    plot_path = f"img/{handler.sensor}"
+    plot_path = f"img/{sensor_id}"
     #make image directories for this sensor if they do not exist already
     Path(plot_path).mkdir(parents=True, exist_ok=True)
-    prefix = os.path.join(plot_path, handler.get_save_name(smoothed))
+    save_prefix = save_prefix if save_prefix else handler.get_save_name(smoothed=smoothed)
+    prefix = os.path.join(plot_path, save_prefix)
 
     cols = cols if cols else handler.data_cols
     #make sure that only columns that have data will be plotted
@@ -62,7 +63,7 @@ class OpenAirPlots:
         r_df = ro.conversion.py2rpy(df)
         return r_df
 
-    def time_variation(self, df, file_prefix, pollutants, width=1200, heigh=700):
+    def time_variation(self, df, file_prefix, pollutants, width=1200, height=700):
         """
         Saves a .png diurnal plot of pollutants over time
 
