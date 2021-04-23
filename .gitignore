@@ -1,3 +1,10 @@
 .ipynb_checkpoints
 */.ipynb_checkpoints/*
 data/cleaned_sn45.csv
+**/.env
+token.txt
+**.DS_Store
+**/__pycache__/**
+**/img/**
+**/qaq_cleaned_data/**
+**/raw_data/**

@@ -1,0 +1,4 @@
+py-quantaq @ git+https://github.com/quant-aq/py-quantaq.git@36d2e4881c3b17a955ad5754193a6615476702de
+numpy>=1.20.1
+pandas>=1.2.3
+plotly>=4.14.3
