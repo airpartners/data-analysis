@@ -195,7 +195,13 @@ class DataHandler:
             start, end = start.tz_localize(None), end.tz_localize(None)
         dates = pd.date_range(start=start, end=end, freq='1Min')
         #fill new empty rows with the last valid value
-        iem_df = iem_df.set_index('timestamp').reindex(dates, method='pad')
+        iem_df['timestamp'] = iem_df['timestamp'].dt.round('1Min') # this operation sometimes adds duplicates by rounding to the same minute.
+        iem_df = iem_df.set_index('timestamp')
+        # delete duplicate timestamps before reindexing, or pandas complains
+        iem_df = iem_df.loc[~iem_df.index.duplicated(), :]
+
+        #reindex meteorology data to match original dataframe
+        iem_df = iem_df.reindex(dates, method='pad')
 
         #convert timestamp index back into a column
         iem_df = iem_df.reset_index().rename(columns={"index": "timestamp"})
