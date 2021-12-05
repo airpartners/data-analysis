@@ -29,5 +29,5 @@ print(df.head())
 
 #also, once you have cleaned a dataframe once, you can load the cleaned dataframe again:
 #load the MOD-PM dataframe we just created
-df = mod_handler.load_df(sensor=mod_id, start=datetime(2020, 12, 9), end=datetime(2021, 3, 31))
+df = mod_handler.load_df(sensor=mod_id, start=start, end=end)
 print(df.head())
