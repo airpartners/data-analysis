@@ -6,9 +6,9 @@ Functions to render various air quality graphs
 """
 import os
 from pathlib import Path
-#TODO this path only works for Mac, make OS specific (i.e. on Ubuntu the R_HOME is at "/usr/lib/R")
+#TODO this path only works for Ubuntu, make OS specific (i.e. on MAC the R_HOME is at "/Library/Frameworks/R.framework/Resources")
 if not os.environ.get("R_HOME"):
-    os.environ['R_HOME'] = "/Library/Frameworks/R.framework/Resources"
+    os.environ['R_HOME'] = "/usr/lib/R"
 from rpy2.robjects.packages import importr
 from rpy2.robjects import pandas2ri
 import rpy2.robjects as ro
@@ -23,7 +23,7 @@ def plot(df, handler, sensor_id, save_prefix=None, smoothed=True, cols=None):
     :param cols: (optional list) if defined, determines the columns of df to include in the plots
     :returns: null but saves OpenAir figures as .pngs locally.
     """
-    plot_path = f"img/{sensor_id}"
+    plot_path = f"imgs/{sensor_id}"
     #make image directories for this sensor if they do not exist already
     Path(plot_path).mkdir(parents=True, exist_ok=True)
     save_prefix = save_prefix if save_prefix else handler.get_save_name(smoothed=smoothed)
